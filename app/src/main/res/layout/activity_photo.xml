@@ -15,7 +15,7 @@
         android:id="@+id/photoView"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="300dp"
@@ -33,7 +33,59 @@
         android:layout_width="200dp"
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/ratingBar"
+        android:id="@+id/photoRate"
         android:layout_below="@+id/titleText"
         android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Favorite?"
+        android:id="@+id/favCheckBox"
+        android:layout_below="@+id/photoRate"
+        android:layout_centerHorizontal="true"
+        android:checked="false" />
+
+    <Spinner
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:id="@+id/categorySpinner"
+        android:spinnerMode="dropdown"
+        android:layout_below="@+id/favCheckBox"
+        android:layout_alignLeft="@+id/titleText"
+        android:layout_alignStart="@+id/titleText" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/categorySpinner"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/buttonsLayout">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Save"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/saveButton"
+            android:clickable="true"
+            android:layout_alignParentBottom="true"
+            />
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Cancel"
+            android:layout_marginLeft="180dp"
+            android:id="@+id/cancelButton"
+            android:clickable="true"
+            android:layout_alignParentBottom="true"
+            />
+        </LinearLayout>
+
+
 </RelativeLayout>
