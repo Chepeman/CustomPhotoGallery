@@ -1,14 +1,13 @@
 package com.customphotogallery.jcarlos.customphotogallery;
 
-import java.io.File;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
+
+import java.io.File;
 
 public class PictureTools {
 	
@@ -84,3 +83,4 @@ public class PictureTools {
 		return size_inicialize;    
 	}
 }
+

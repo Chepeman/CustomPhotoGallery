@@ -11,5 +11,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollGallery" />
+        android:id="@+id/scrollGallery">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/linearGallery"
+            android:orientation="vertical">
+            </LinearLayout>
+        </ScrollView>
+
 </RelativeLayout>

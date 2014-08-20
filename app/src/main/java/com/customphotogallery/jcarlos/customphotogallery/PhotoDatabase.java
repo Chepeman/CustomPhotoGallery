@@ -24,6 +24,31 @@ public class PhotoDatabase {
                 + DBhelper.COLUMN_FAV + ") VALUES(?,?,?,?)",data);
     }
 
+    public String[][] getSectionPictures(String section){
+        String pictures[][] = null;
+        String[] args = {section};
+        int counter = 0;
+        Cursor cursor = querySQL("SELECT * FROM " + DBhelper.TABLE_PICTURE + " WHERE " + DBhelper.COLUMN_SECTION_NAME + "= ?", args);
+        if(cursor.getCount()>0){
+            pictures = new String[cursor.getCount()][];
+            while(cursor.moveToNext()){
+                pictures[counter] = new String[5];
+                pictures[counter][0] = cursor.getString(cursor.getColumnIndex(DBhelper.ID_PIC));
+                pictures[counter][1] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_NAME));
+                pictures[counter][2] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_RATING));
+                pictures[counter][3] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_FAV));
+                pictures[counter][4] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_SECTION_NAME));
+                counter++;
+            }
+        }
+        else{
+            pictures = new String[0][];
+        }
+        cursor.close();
+        CloseDB();
+        return pictures;
+    }
+
     public long executeSQL(String sql, Object[] bindArgs)
     {
         long iRet = 0;
@@ -68,7 +93,7 @@ public class PhotoDatabase {
         private static final String COLUMN_NAME = "name";
         private static final String COLUMN_RATING = "rating";
         private static final String COLUMN_FAV = "fav";
-        private static final String COLUMN_SECTION_NAME = "name";
+        private static final String COLUMN_SECTION_NAME = "section";
 
         DBhelper (Context context){
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -82,7 +107,7 @@ public class PhotoDatabase {
                     + DBhelper.COLUMN_NAME + " TEXT,"
                     + DBhelper.COLUMN_RATING + " NUMERIC,"
                     + DBhelper.COLUMN_SECTION_NAME + " TEXT,"
-                    + DBhelper.COLUMN_FAV + " INTEGER,"
+                    + DBhelper.COLUMN_FAV + " INTEGER"
                     + ");");
         }
 

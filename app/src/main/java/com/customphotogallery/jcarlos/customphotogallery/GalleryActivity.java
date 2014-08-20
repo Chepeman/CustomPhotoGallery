@@ -3,6 +3,7 @@ package com.customphotogallery.jcarlos.customphotogallery;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Rating;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,15 +13,17 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 public class GalleryActivity extends Activity {
@@ -28,17 +31,21 @@ public class GalleryActivity extends Activity {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int EDIT_IMAGE_ACTIVITY_REQUEST_CODE = 200;
     private static final int MEDIA_TYPE_VIDEO = 2;
-    private ScrollView scrollGallery;
+    public PhotoDatabase db;
+    private LinearLayout scrollGallery;
     private Uri fileUri;
     private ArrayList<View> sections;
 
+    public GalleryActivity(){
+        db = new PhotoDatabase(this);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        scrollGallery = (ScrollView) findViewById(R.id.scrollGallery);
+        scrollGallery = (LinearLayout) findViewById(R.id.linearGallery);
         sections = new ArrayList<View>();
-        addSection("First Section");
+        addSections();
     }
 
 
@@ -66,13 +73,41 @@ public class GalleryActivity extends Activity {
         }
     }
 
-    void addSection(String message) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View v = inflater.inflate(R.layout.section_layout, null);
-        TextView sectionMessage = (TextView) v.findViewById(R.id.sectionTitle);
-        sectionMessage.setText(message);
-        sections.add(v);
-        scrollGallery.addView(v);
+    void loadSection(String section, int sec){
+        String[][] pictures = db.getSectionPictures(section);
+        if(pictures != null){
+            View v = sections.get(sec);
+            GridLayout grid = (GridLayout)v.findViewById(R.id.gridLayout);
+
+            for(int i=0; i < pictures.length; i++){
+                LayoutInflater inflater = LayoutInflater.from(this);
+                View photo = inflater.inflate(R.layout.photo_section, null);
+                ImageView image = (ImageView) photo.findViewById(R.id.imgPhoto);
+                RatingBar ratingb = (RatingBar) photo.findViewById(R.id.ratPhoto);
+                Bitmap bit_map = PictureTools.decodeSampledBitmapFromUri(pictures[i][1], 188, 150);
+                image.setImageBitmap(bit_map);
+                ratingb.setRating(Float.parseFloat(pictures[i][2]));
+                grid.addView(photo);
+            }
+        }
+        else{
+            Log.d("PIC" , "No pos null");
+        }
+    }
+    void addSections() {
+        String[] message = getResources().getStringArray(R.array.sections_array);
+        int len = message.length;
+        for(int i = 0; i < len; i++){
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View v = inflater.inflate(R.layout.section_layout, null);
+            TextView sectionMessage = (TextView) v.findViewById(R.id.sectionTitle);
+            sectionMessage.setText(message[i]);
+            sections.add(v);
+            scrollGallery.addView(v);
+
+        }
+        loadSection(message[1], 1);
+
     }
 
     void openCamera() {
@@ -87,8 +122,10 @@ public class GalleryActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                Log.d("TAG", fileUri.toString());
                 Bitmap bit_map = PictureTools.decodeSampledBitmapFromUri(fileUri.getPath(), 200, 200);
                 Intent intent = new Intent(this,PhotoActivity.class);
+                intent.putExtra("name", fileUri.getPath().toString());
                 intent.putExtra("image", bit_map);
                 startActivityForResult(intent,EDIT_IMAGE_ACTIVITY_REQUEST_CODE);
                 //addImageToTheGrid(bit_map);
@@ -101,10 +138,10 @@ public class GalleryActivity extends Activity {
         }
         else if(requestCode == EDIT_IMAGE_ACTIVITY_REQUEST_CODE){
             if (resultCode == RESULT_OK) {
-
+                Log.d("FINISHED", "After the Insert!");
 
             } else if (resultCode == RESULT_CANCELED) {
-                //El usuario cancela la imagen a capturar
+                Log.d("FINISHED", "Canceled the Insert!");
             } else {
                 //La captura de la imagen fallo.
             }

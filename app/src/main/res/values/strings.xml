@@ -6,5 +6,9 @@
     <string name="action_settings">Settings</string>
     <string name="action_camera">Open Camera</string>
     <string name="title_activity_photo">PhotoActivity</string>
-
+    <string-array name="sections_array">
+        <item>Static</item>
+        <item>Camera</item>
+        <item>Gallery</item>
+    </string-array>
 </resources>

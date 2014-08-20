@@ -5,16 +5,19 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <ImageButton
+    <ImageView
         android:layout_width="188dp"
         android:layout_height="150dp"
-        android:id="@+id/imageButton"
+        android:id="@+id/imgPhoto"
         android:layout_weight="0.13" />
 
     <RatingBar
         android:layout_marginLeft="0dp"
         android:layout_width="188dp"
         android:layout_height="wrap_content"
-        android:id="@+id/ratingBar"
+        android:id="@+id/ratPhoto"
+        android:numStars="5"
+        android:rating="5.0"
+        android:stepSize="0.5"
         android:layout_gravity="center_vertical" />
 </LinearLayout>
