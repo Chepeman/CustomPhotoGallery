@@ -26,6 +26,7 @@ import java.util.List;
 public class GalleryActivity extends Activity {
     private static final int MEDIA_TYPE_IMAGE = 1;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int EDIT_IMAGE_ACTIVITY_REQUEST_CODE = 200;
     private static final int MEDIA_TYPE_VIDEO = 2;
     private ScrollView scrollGallery;
     private Uri fileUri;
@@ -89,8 +90,18 @@ public class GalleryActivity extends Activity {
                 Bitmap bit_map = PictureTools.decodeSampledBitmapFromUri(fileUri.getPath(), 200, 200);
                 Intent intent = new Intent(this,PhotoActivity.class);
                 intent.putExtra("image", bit_map);
-                startActivity(intent);
+                startActivityForResult(intent,EDIT_IMAGE_ACTIVITY_REQUEST_CODE);
                 //addImageToTheGrid(bit_map);
+
+            } else if (resultCode == RESULT_CANCELED) {
+                //El usuario cancela la imagen a capturar
+            } else {
+                //La captura de la imagen fallo.
+            }
+        }
+        else if(requestCode == EDIT_IMAGE_ACTIVITY_REQUEST_CODE){
+            if (resultCode == RESULT_OK) {
+
 
             } else if (resultCode == RESULT_CANCELED) {
                 //El usuario cancela la imagen a capturar
