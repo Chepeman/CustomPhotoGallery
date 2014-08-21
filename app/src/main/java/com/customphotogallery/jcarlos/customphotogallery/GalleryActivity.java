@@ -3,22 +3,17 @@ package com.customphotogallery.jcarlos.customphotogallery;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Rating;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridLayout;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -31,10 +26,13 @@ public class GalleryActivity extends Activity {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int EDIT_IMAGE_ACTIVITY_REQUEST_CODE = 200;
     private static final int MEDIA_TYPE_VIDEO = 2;
-    public PhotoDatabase db;
+
     private LinearLayout scrollGallery;
     private Uri fileUri;
     private ArrayList<View> sections;
+    private ListView galleryListView;
+    public PhotoDatabase db;
+    private ArrayList<DataList> listDataV;
 
     public GalleryActivity(){
         db = new PhotoDatabase(this);
@@ -43,9 +41,17 @@ public class GalleryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        scrollGallery = (LinearLayout) findViewById(R.id.linearGallery);
-        sections = new ArrayList<View>();
-        addSections();
+        galleryListView = (ListView) findViewById(R.id.listView2);
+        String[] message = getResources().getStringArray(R.array.sections_array);
+        listDataV = new ArrayList<DataList>();
+        GridAdapter adapter = loadSection(message[1]);
+        if(adapter != null){
+            GridView gridV = new GridView(this);
+            DataList listV = new DataList(gridV, adapter, message[1]);
+            listDataV.add(listV);
+            galleryListView.setAdapter(new ListVAdapter(this, listDataV));
+        }
+
     }
 
 
@@ -73,41 +79,27 @@ public class GalleryActivity extends Activity {
         }
     }
 
-    void loadSection(String section, int sec){
+    GridAdapter loadSection(String section){
         String[][] pictures = db.getSectionPictures(section);
+        ArrayList<DataGrid> listData;
+        listData = new ArrayList<DataGrid>();
+        GridAdapter adapter = null;
         if(pictures != null){
-            View v = sections.get(sec);
-            GridLayout grid = (GridLayout)v.findViewById(R.id.gridLayout);
-
-            for(int i=0; i < pictures.length; i++){
-                LayoutInflater inflater = LayoutInflater.from(this);
-                View photo = inflater.inflate(R.layout.photo_section, null);
-                ImageView image = (ImageView) photo.findViewById(R.id.imgPhoto);
-                RatingBar ratingb = (RatingBar) photo.findViewById(R.id.ratPhoto);
-                Bitmap bit_map = PictureTools.decodeSampledBitmapFromUri(pictures[i][1], 188, 150);
-                image.setImageBitmap(bit_map);
-                ratingb.setRating(Float.parseFloat(pictures[i][2]));
-                grid.addView(photo);
+            adapter = new GridAdapter(this, listData);
+            int len = pictures.length;
+            for(int i = 0; i< len; i++){
+                DataGrid data = new DataGrid(
+                        PictureTools.decodeSampledBitmapFromUri(pictures[i][1], 188, 150),
+                        Float.parseFloat(pictures[i][2]));
+                listData.add(data);
             }
+
         }
         else{
-            Log.d("PIC" , "No pos null");
+            Log.d("PIC", "No pos null");
         }
-    }
-    void addSections() {
-        String[] message = getResources().getStringArray(R.array.sections_array);
-        int len = message.length;
-        for(int i = 0; i < len; i++){
-            LayoutInflater inflater = LayoutInflater.from(this);
-            View v = inflater.inflate(R.layout.section_layout, null);
-            TextView sectionMessage = (TextView) v.findViewById(R.id.sectionTitle);
-            sectionMessage.setText(message[i]);
-            sections.add(v);
-            scrollGallery.addView(v);
 
-        }
-        loadSection(message[1], 1);
-
+        return adapter;
     }
 
     void openCamera() {
@@ -148,13 +140,7 @@ public class GalleryActivity extends Activity {
         }
     }
 
-    /*private void addImageToTheGrid(Bitmap bit_map) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View v = inflater.inflate(R.layout.section_layout, null);
-        TextView sectionMessage = (TextView) v.findViewById(R.id.sectionTitle);
-        sectionMessage.setText(message);
-        scrollGallery.addView(v);
-    }*/
+
 
     private static Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
