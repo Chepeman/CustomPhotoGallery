@@ -2,6 +2,7 @@ package com.customphotogallery.jcarlos.customphotogallery;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import java.util.ArrayList;
 public class ListVAdapter extends BaseAdapter {
     private ArrayList<DataList> listData;
     private LayoutInflater layoutInflater;
+    private Context context;
 
     public ListVAdapter(Context context, ArrayList<DataList> listData){
         this.listData = listData;
+        this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
     @Override
@@ -50,6 +53,18 @@ public class ListVAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder) view.getTag();
         }
+
+
+
+        int multiplier;
+        int len = listData.get(i).getAdapter().getCount();
+        if(len%2 == 0)
+            multiplier = (len)/2;
+        else
+            multiplier = (len + 1)/2;
+        ViewGroup.LayoutParams layoutParams =  holder.gridSection.getLayoutParams();
+        layoutParams.height = 400 * multiplier;
+        holder.gridSection.setLayoutParams(layoutParams);
         holder.sectionText.setText(listData.get(i).getTitle());
         holder.gridSection.setAdapter(listData.get(i).getAdapter());
         return view;

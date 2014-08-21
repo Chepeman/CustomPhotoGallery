@@ -5,9 +5,24 @@
         android:icon="@drawable/ic_action_camera"
         android:title="@string/action_camera"
         android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_all"
+        android:title="@string/action_all"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
-
+    <item android:id="@+id/action_filter_static"
+        android:title="@string/action_fil_static"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_filter_camera"
+        android:title="@string/action_fil_camera"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_filter_gallery"
+        android:title="@string/action_fil_gallery"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
 </menu>

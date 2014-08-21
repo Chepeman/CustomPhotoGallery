@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,17 +43,12 @@ public class GalleryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         galleryListView = (ListView) findViewById(R.id.listView2);
-        String[] message = getResources().getStringArray(R.array.sections_array);
-        listDataV = new ArrayList<DataList>();
-        GridAdapter adapter = loadSection(message[1]);
-        if(adapter != null){
-            GridView gridV = new GridView(this);
-            DataList listV = new DataList(gridV, adapter, message[1]);
-            listDataV.add(listV);
-            galleryListView.setAdapter(new ListVAdapter(this, listDataV));
-        }
+        loadSections();
+
 
     }
+
+
 
 
     @Override
@@ -73,6 +69,18 @@ public class GalleryActivity extends Activity {
                 return true;
             case R.id.action_settings:
                 //openSettings();
+                return true;
+            case R.id.action_all:
+               loadSections();
+                return true;
+            case R.id.action_filter_static:
+                filterSection("Static");
+                return true;
+            case R.id.action_filter_camera:
+                filterSection("Camera");
+                return true;
+            case R.id.action_filter_gallery:
+                filterSection("Gallery");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -102,6 +110,30 @@ public class GalleryActivity extends Activity {
         return adapter;
     }
 
+    void loadSections(){
+        String[] message = getResources().getStringArray(R.array.sections_array);
+        listDataV = new ArrayList<DataList>();
+        for(int i = 0; i < message.length; i++) {
+            GridAdapter adapter = loadSection(message[i]);
+            if (adapter != null) {
+                GridView gridV = new GridView(this);
+                DataList listV = new DataList(gridV, adapter, message[i]);
+                listDataV.add(listV);
+                galleryListView.setAdapter(new ListVAdapter(this, listDataV));
+            }
+        }
+    }
+
+    void filterSection(String section){
+        listDataV = new ArrayList<DataList>();
+        GridAdapter adapter = loadSection(section);
+        if (adapter != null) {
+            GridView gridV = new GridView(this);
+            DataList listV = new DataList(gridV, adapter, section);
+            listDataV.add(listV);
+            galleryListView.setAdapter(new ListVAdapter(this, listDataV));
+        }
+    }
     void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
@@ -131,6 +163,7 @@ public class GalleryActivity extends Activity {
         else if(requestCode == EDIT_IMAGE_ACTIVITY_REQUEST_CODE){
             if (resultCode == RESULT_OK) {
                 Log.d("FINISHED", "After the Insert!");
+                loadSections();
 
             } else if (resultCode == RESULT_CANCELED) {
                 Log.d("FINISHED", "Canceled the Insert!");
