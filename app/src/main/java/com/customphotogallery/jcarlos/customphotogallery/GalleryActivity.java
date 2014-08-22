@@ -115,7 +115,7 @@ public class GalleryActivity extends Activity {
         listDataV = new ArrayList<DataList>();
         for(int i = 0; i < message.length; i++) {
             GridAdapter adapter = loadSection(message[i]);
-            if (adapter != null) {
+            if (adapter != null && adapter.getCount() > 0) {
                 GridView gridV = new GridView(this);
                 DataList listV = new DataList(gridV, adapter, message[i]);
                 listDataV.add(listV);
