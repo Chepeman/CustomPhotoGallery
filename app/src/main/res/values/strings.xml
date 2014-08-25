@@ -18,5 +18,6 @@
     </string-array>
 
     <string name="title_activity_list_view">ListViewActivity</string>
+    <string name="title_activity_photo_fs">PhotoFsActivity</string>
 
 </resources>

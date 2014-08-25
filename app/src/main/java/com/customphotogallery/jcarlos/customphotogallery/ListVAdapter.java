@@ -1,11 +1,13 @@
 package com.customphotogallery.jcarlos.customphotogallery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -48,6 +50,16 @@ public class ListVAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.gridSection = (GridView) view.findViewById(R.id.sectionGrid);
             holder.sectionText = (TextView) view.findViewById(R.id.sectionText);
+
+            holder.gridSection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                   Intent intent = new Intent(context, PhotoFsActivity.class);
+                    DataGrid gridItem = (DataGrid) adapterView.getItemAtPosition(i);
+                    intent.putExtra("ID", gridItem.getID());
+                    context.startActivity(intent);
+                }
+            });
             view.setTag(holder);
         }
         else {

@@ -23,6 +23,10 @@
             android:name=".PhotoActivity"
             android:label="@string/title_activity_photo" >
         </activity>
+        <activity
+            android:name=".PhotoFsActivity"
+            android:label="@string/title_activity_photo_fs" >
+        </activity>
     </application>
 
 </manifest>

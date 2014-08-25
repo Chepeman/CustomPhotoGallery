@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,7 +33,7 @@ public class GalleryActivity extends Activity {
     private Uri fileUri;
     private ArrayList<View> sections;
     private ListView galleryListView;
-    public PhotoDatabase db;
+    public static PhotoDatabase db;
     private ArrayList<DataList> listDataV;
 
     public GalleryActivity(){
@@ -44,9 +45,9 @@ public class GalleryActivity extends Activity {
         setContentView(R.layout.activity_gallery);
         galleryListView = (ListView) findViewById(R.id.listView2);
         loadSections();
-
-
     }
+
+
 
 
 
@@ -97,6 +98,7 @@ public class GalleryActivity extends Activity {
             int len = pictures.length;
             for(int i = 0; i< len; i++){
                 DataGrid data = new DataGrid(
+                        Integer.parseInt(pictures[i][0]),
                         PictureTools.decodeSampledBitmapFromUri(pictures[i][1], 188, 150),
                         Float.parseFloat(pictures[i][2]));
                 listData.add(data);

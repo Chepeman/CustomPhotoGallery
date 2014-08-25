@@ -49,6 +49,27 @@ public class PhotoDatabase {
         return pictures;
     }
 
+    public String[] getPicture(int ID){
+        String[] picture = null;
+        Cursor cursor = querySQL("SELECT * FROM " + DBhelper.TABLE_PICTURE + " WHERE " + DBhelper.ID_PIC + "=" + ID, null);
+        if(cursor.getCount()>0){
+            cursor.moveToFirst();
+            picture = new String[5];
+            picture[0] = cursor.getString(cursor.getColumnIndex(DBhelper.ID_PIC));
+            picture[1] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_NAME));
+            picture[2] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_RATING));
+            picture[3] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_FAV));
+            picture[4] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_SECTION_NAME));
+
+        }
+        else{
+            picture = new String[0];
+        }
+        cursor.close();
+        CloseDB();
+        return picture;
+    }
+
     public long executeSQL(String sql, Object[] bindArgs)
     {
         long iRet = 0;
