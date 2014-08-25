@@ -2,6 +2,7 @@ package com.customphotogallery.jcarlos.customphotogallery;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -74,8 +75,10 @@ public class ListVAdapter extends BaseAdapter {
             multiplier = (len)/2;
         else
             multiplier = (len + 1)/2;
+
         ViewGroup.LayoutParams layoutParams =  holder.gridSection.getLayoutParams();
-        layoutParams.height = 400 * multiplier;
+        int densityMultiplier = getDeviceResolution();
+        layoutParams.height = densityMultiplier * multiplier;
         holder.gridSection.setLayoutParams(layoutParams);
         holder.sectionText.setText(listData.get(i).getTitle());
         holder.gridSection.setAdapter(listData.get(i).getAdapter());
@@ -85,5 +88,27 @@ public class ListVAdapter extends BaseAdapter {
     static class ViewHolder{
         GridView gridSection;
         TextView sectionText;
+    }
+
+    private int getDeviceResolution() {
+        int density = context.getResources().getDisplayMetrics().densityDpi;
+        switch (density) {
+            case DisplayMetrics.DENSITY_MEDIUM:
+                return 410;
+            case DisplayMetrics.DENSITY_HIGH:
+                return 410;
+            case DisplayMetrics.DENSITY_LOW:
+                return 410;
+            case DisplayMetrics.DENSITY_XHIGH:
+                return 410;
+            case DisplayMetrics.DENSITY_TV:
+                return 410;
+            case DisplayMetrics.DENSITY_XXHIGH:
+                return 610;
+            case DisplayMetrics.DENSITY_XXXHIGH:
+                return 810;
+            default:
+                return 400;
+        }
     }
 }

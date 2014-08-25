@@ -68,6 +68,9 @@ public class GalleryActivity extends Activity {
             case R.id.action_camera:
                 openCamera();
                 return true;
+            case R.id.action_fav:
+                filterSection("Favorites");
+                return true;
             case R.id.action_settings:
                 //openSettings();
                 return true;
@@ -89,7 +92,11 @@ public class GalleryActivity extends Activity {
     }
 
     GridAdapter loadSection(String section){
-        String[][] pictures = db.getSectionPictures(section);
+        String[][] pictures;
+        if(section.equals("Favorites"))
+            pictures = db.getFavorites();
+        else
+            pictures = db.getSectionPictures(section);
         ArrayList<DataGrid> listData;
         listData = new ArrayList<DataGrid>();
         GridAdapter adapter = null;
@@ -143,17 +150,20 @@ public class GalleryActivity extends Activity {
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
+    void loadPhoto(){
+        Bitmap bit_map = PictureTools.decodeSampledBitmapFromUri(fileUri.getPath(), 200, 200);
+        Intent intent = new Intent(this,PhotoActivity.class);
+        intent.putExtra("name", fileUri.getPath().toString());
+        intent.putExtra("image", bit_map);
+        startActivityForResult(intent,EDIT_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Log.d("TAG", fileUri.toString());
-                Bitmap bit_map = PictureTools.decodeSampledBitmapFromUri(fileUri.getPath(), 200, 200);
-                Intent intent = new Intent(this,PhotoActivity.class);
-                intent.putExtra("name", fileUri.getPath().toString());
-                intent.putExtra("image", bit_map);
-                startActivityForResult(intent,EDIT_IMAGE_ACTIVITY_REQUEST_CODE);
+                loadPhoto();
                 //addImageToTheGrid(bit_map);
 
             } else if (resultCode == RESULT_CANCELED) {

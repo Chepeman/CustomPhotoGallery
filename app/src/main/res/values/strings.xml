@@ -9,9 +9,17 @@
     <string name="action_fil_gallery">Filter By Gallery</string>
     <string name="action_fil_camera">Filter By Camera</string>
     <string name="action_all">All Photos</string>
+    <string name="action_fav">Favorites</string>
     <string name="title_activity_photo">PhotoActivity</string>
 
     <string-array name="sections_array">
+        <item>Favorites</item>
+        <item>Static</item>
+        <item>Camera</item>
+        <item>Gallery</item>
+    </string-array>
+
+    <string-array name="spinner_array">
         <item>Static</item>
         <item>Camera</item>
         <item>Gallery</item>
@@ -19,5 +27,6 @@
 
     <string name="title_activity_list_view">ListViewActivity</string>
     <string name="title_activity_photo_fs">PhotoFsActivity</string>
+    <string name="title_activity_edit">EditActivity</string>
 
 </resources>

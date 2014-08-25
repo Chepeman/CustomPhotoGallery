@@ -7,19 +7,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:background="#000000"
-    tools:context="com.customphotogallery.jcarlos.customphotogallery.PhotoActivity">
-
+    tools:context="com.customphotogallery.jcarlos.customphotogallery.EditActivity">
 
     <ImageView
-        android:layout_width="270dp"
-        android:layout_height="270dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/photoView"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
         android:layout_marginTop="5dp" />
 
     <TextView
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:background="#4a4848"
         android:textColor="#ffffff"
@@ -44,7 +43,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:text="Favorite?"
         android:id="@+id/favCheckBox"
         android:textColor="#ffffff"
@@ -57,10 +56,11 @@
         android:layout_height="40dp"
         android:id="@+id/categorySpinner"
         android:spinnerMode="dropdown"
-        android:layout_below="@+id/favCheckBox"
         android:background="@drawable/border"
-        android:layout_alignLeft="@+id/titleText"
-        android:layout_alignStart="@+id/titleText" />
+        android:layout_below="@+id/favCheckBox"
+
+        />
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -75,7 +75,7 @@
             android:layout_height="30dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Save"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="0dp"
             android:id="@+id/saveButton"
             android:clickable="true"
             android:onClick="onSaveClick"
@@ -88,14 +88,13 @@
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Cancel"
-            android:layout_marginLeft="180dp"
+            android:layout_marginLeft="170dp"
             android:id="@+id/cancelButton"
             android:clickable="true"
             android:onClick="onCancelClick"
             android:textColor="#ffffff"
             android:layout_alignParentBottom="true"
             />
-        </LinearLayout>
-
+    </LinearLayout>
 
 </RelativeLayout>

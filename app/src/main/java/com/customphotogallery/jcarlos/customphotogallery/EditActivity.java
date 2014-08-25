@@ -1,7 +1,7 @@
 package com.customphotogallery.jcarlos.customphotogallery;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,34 +17,47 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-public class PhotoActivity extends Activity {
+public class EditActivity extends Activity {
+    String[] picture;
     private ImageView photoView;
     private TextView photoName;
     private RatingBar ratePhoto;
     private CheckBox favoriteCheck;
     private Spinner categorySpinner;
-    public static PhotoDatabase db;
-    private double rating;
-    private static String photo_title;
-    private static String section;
+    private String section;
+    private float rating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
+        setContentView(R.layout.activity_edit);
         Bundle oExt = this.getIntent().getExtras();
+        picture = oExt.getStringArray("photo");
         photoView = (ImageView) findViewById(R.id.photoView);
         ratePhoto = (RatingBar) findViewById(R.id.photoRate);
         favoriteCheck = (CheckBox) findViewById(R.id.favCheckBox);
         categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
         photoName = (TextView) findViewById(R.id.titleText);
-        photoView.setImageBitmap((Bitmap)oExt.get("image"));
-        photo_title = oExt.getString("name");
-        String[] splited = photo_title.split("/");
-        photoName.setText(splited[splited.length - 1]);
+        rating = Float.parseFloat(picture[2]);
+        ratePhoto.setRating(rating);
+        if(Integer.parseInt(picture[3]) == 1)
+            favoriteCheck.setChecked(true);
+        else
+            favoriteCheck.setChecked(false);
+        ratePhoto.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                rating = v;
+            }
+        });
+        photoView.setImageBitmap(PictureTools.decodeSampledBitmapFromUri(picture[1], 270, 270));
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.spinner_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
+        int positionSpinner = adapter.getPosition(picture[4]);
+        categorySpinner.setSelection(positionSpinner);
+        String[] splited = picture[1].split("/");
+        photoName.setText(splited[splited.length - 1]);
         ratePhoto.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -65,14 +78,14 @@ public class PhotoActivity extends Activity {
 
             }
         });
-    }
 
+    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.photo, menu);
+        getMenuInflater().inflate(R.menu.edit, menu);
         return true;
     }
 
@@ -89,15 +102,13 @@ public class PhotoActivity extends Activity {
     }
 
     public void onSaveClick(View v){
-        db = new PhotoDatabase(this);
-        db.insertPicture(photo_title,rating,section,favoriteCheck.isChecked());
-        setResult(RESULT_OK);
-        finish();
+        GalleryActivity.db.updatePhoto(Integer.parseInt(picture[0]), picture[1], rating, section, favoriteCheck.isChecked());
+        Intent intent = new Intent(this, GalleryActivity.class);
+        startActivity(intent);
     }
 
     public void onCancelClick(View v){
-        setResult(RESULT_CANCELED);
-        finish();
+        Intent intent = new Intent(this, GalleryActivity.class);
+        startActivity(intent);
     }
-
 }

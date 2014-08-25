@@ -1,23 +1,26 @@
 package com.customphotogallery.jcarlos.customphotogallery;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 
 public class PhotoFsActivity extends Activity {
     private int ID;
     private ImageView photoViewFS;
+    private String[] picture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_fs);
         Bundle oExt = this.getIntent().getExtras();
         ID = oExt.getInt("ID");
-        String[] picture =  GalleryActivity.db.getPicture(ID);
+        picture =  GalleryActivity.db.getPicture(ID);
         photoViewFS = (ImageView) findViewById(R.id.photoViewFS);
         Log.d("IMAGE", Integer.toString(photoViewFS.getMeasuredWidth()));
         photoViewFS.setImageBitmap(PictureTools.decodeSampledBitmapFromUri(picture[1], 360, 440));
@@ -42,5 +45,15 @@ public class PhotoFsActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onEdit(View v){
+        Intent intent = new Intent(this, EditActivity.class);
+        intent.putExtra("photo", picture);
+        startActivity(intent);
+    }
+
+    public void onCancel(View v){
+        finish();
     }
 }

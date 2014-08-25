@@ -24,6 +24,30 @@ public class PhotoDatabase {
                 + DBhelper.COLUMN_FAV + ") VALUES(?,?,?,?)",data);
     }
 
+    public String[][] getFavorites(){
+        String pictures[][] = null;
+        int counter = 0;
+        Cursor cursor = querySQL("SELECT * FROM " + DBhelper.TABLE_PICTURE + " WHERE " + DBhelper.COLUMN_FAV + "= 1", null);
+        if(cursor.getCount()>0){
+            pictures = new String[cursor.getCount()][];
+            while(cursor.moveToNext()){
+                pictures[counter] = new String[5];
+                pictures[counter][0] = cursor.getString(cursor.getColumnIndex(DBhelper.ID_PIC));
+                pictures[counter][1] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_NAME));
+                pictures[counter][2] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_RATING));
+                pictures[counter][3] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_FAV));
+                pictures[counter][4] = cursor.getString(cursor.getColumnIndex(DBhelper.COLUMN_SECTION_NAME));
+                counter++;
+            }
+        }
+        else{
+            pictures = new String[0][];
+        }
+        cursor.close();
+        CloseDB();
+        return pictures;
+    }
+
     public String[][] getSectionPictures(String section){
         String pictures[][] = null;
         String[] args = {section};
@@ -68,6 +92,16 @@ public class PhotoDatabase {
         cursor.close();
         CloseDB();
         return picture;
+    }
+
+    public void updatePhoto(int ID, String name, float rating, String section, boolean favorite){
+        Object[] aData = {name, rating, favorite, section, ID};
+        executeSQL("UPDATE " + DBhelper.TABLE_PICTURE + " SET "
+                + DBhelper.COLUMN_NAME + " = ?, "
+                + DBhelper.COLUMN_RATING + " = ?, "
+                + DBhelper.COLUMN_FAV + " = ?, "
+                + DBhelper.COLUMN_SECTION_NAME + " = ? " +
+                " WHERE " + DBhelper.ID_PIC + " = ?", aData);
     }
 
     public long executeSQL(String sql, Object[] bindArgs)

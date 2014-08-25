@@ -9,8 +9,8 @@
         android:title="@string/action_all"
         android:orderInCategory="100"
         android:showAsAction="never" />
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_fav"
+        android:title="@string/action_fav"
         android:orderInCategory="100"
         android:showAsAction="never" />
     <item android:id="@+id/action_filter_static"
@@ -23,6 +23,10 @@
         android:showAsAction="never" />
     <item android:id="@+id/action_filter_gallery"
         android:title="@string/action_fil_gallery"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
 </menu>
